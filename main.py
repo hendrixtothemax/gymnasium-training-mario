@@ -3,7 +3,7 @@ import time
 
 # https://docs.pyboy.dk/index.html
 
-pyboy = PyBoy("./roms/SMBD.gbc", window="SDL2")
+pyboy = PyBoy("./roms/SMBD.gbc", window="SDL2", scale=6)
 
 while True:
     pyboy.tick()
