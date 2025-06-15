@@ -1,38 +1,27 @@
 from pyboy import PyBoy
-from pyboy.windowevent import WindowEvent
 
-import time
-
-# https://docs.pyboy.dk/index.html
-
-SAVE_STATE_SLOT = 1  # slot to save to
 pyboy = PyBoy("./roms/SMBD.gbc", window="SDL2", scale=6)
 
-pyboy.set_emulation_speed(0)  # Full speed
+def dump_memory_hex(memory, start_addr, end_addr):
+    for addr in range(start_addr, end_addr + 1):
+        byte = memory[addr]
+        print(f"0x{addr:04X}: 0x{byte:02X}")
 
-# Let the game initialize
-for _ in range(100):
-    pyboy.tick()
 
-    running = True
-    while running:
-        # Handle user input
-        if pyboy.get_input():
-            if pyboy.window.get_pressed_keys():
-                keys = pyboy.window.get_pressed_keys()
-                if WindowEvent.PRESS_ARROW_LEFT in keys:
-                    print("Left arrow pressed")
+cur_frame = 0
+while pyboy.tick():
+    cur_frame += 1
+    if cur_frame % 15 == 0:
+        x_low, x_high = pyboy.memory[0xC1CA:0xC1CC]
+        y_low, y_high = pyboy.memory[0xC1CC:0xC1CE]
 
-            # Check for custom hotkey (e.g. F5 for save state)
-            if pyboy.window.get_event(WindowEvent.PRESS_BUTTON_START):
-                print("Saving state at Mario's starting position...")
-                pyboy.save_state(SAVE_STATE_SLOT)
+        mario_x = x_low + (x_high << 8)
+        mario_y = y_low + (y_high << 8)
 
-            # Press ESC to quit
-            if pyboy.window.get_event(WindowEvent.PRESS_BUTTON_SELECT):
-                print("Exiting...")
-                running = False
 
-        pyboy.tick()
+        print(f"Frame: {cur_frame} | Mario POS: ({mario_x}, {mario_y})", end="\r", flush=True)
+    
+    if cur_frame >= 60:
+        cur_frame = 0
 
-    time.sleep(0.01)  # Slow down so you can see it
+pyboy.stop()

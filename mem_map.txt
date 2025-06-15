@@ -1,0 +1,244 @@
+https://datacrystal.tcrf.net/wiki/Super_Mario_Bros._Deluxe/RAM_map
+
+Addr    Size    Description
+----    ----    -----------
+6000    8192    Current level metatiles
+                * See Notes page for list of metatiles
+C100      19    Current HUD tiles
+C160       1    Level set
+                * 00 - Super Mario Bros.
+                * 01 - For Super Players
+C162       1    Current level
+                * See Notes page for values
+C166       1    Hard mode flag
+C17A       3    Score digits
+C17D       2    Time digits
+C17F       1    Lives count
+C180       1    Time timer
+C181       1    Time disable flag
+C1A8       1    Current menu selection
+                * 00 - Original 1985 (Goes to File Select)
+                * 01 - Challenge Mode
+                * 02 - Vs. Game
+                * 03 - Super Mario Bros. For Super Players
+                * 04 - Records
+                * 05 - Album
+                * 06 - Toy Box
+                * 07 - You Vs. Boo
+C1B9       1    Player Y position (map)
+C1BA       1    Player X position (map)
+C1C1       1    Player state
+                * 00 - On ground
+                * 01 - In the air
+                * 02 - Free movement
+                * 03 - Dead
+                * 04 - On map
+                * 05 - Stationary
+                * 06 - Power down animation
+                * 07 - Power-up animation
+                * 08/0B - Sub-area transition
+                * 09 - Fire Flower power-up animation
+                * 0A - Auto-walking at end of castle
+C1C2       1    Player pose
+                * 00 - Standing
+                * 01 - Walking 1
+                * 02 - Walking 2
+                * 03 - Turning around
+                * 04 - Jumping
+                * 05 - Swimming 1
+                * 06 - Walking 3
+                * 07 - Climbing 1
+                * 08 - Swimming 2
+                * 09 - Swimming 3
+                * 0A - Swimming 4
+                * 0B - Crouching
+                * 0C - Climbing 2
+                * 0D - Fireball shoot
+                * 0E - Swimming 5
+                * 0F - Mid-power up
+                * 11 - Swimming 6
+C1C3       1    Player direction
+                * 00 - Left
+                * 02 - Right
+C1C5       1    Player growth flag
+                * 00 - Small
+                * 01 - Big
+                * 02 and above - Glitchy, may crash game
+C1C7       1    Jump height (always starts at 20 each time and decreases back to 0)
+C1CA       2    Player X position
+C1CC       2    Player Y position
+C1CE       1    Player fireballs flag
+C1D5       1    Invulnerability timer
+C1DA       2    Star timer
+C1DC       1    Colors to flash during Star
+C1F2       1    Coin count
+C383       1    Player select
+                * 00 - Mario
+                * 01 - Luigi
+D000      15    Sprite states?
+                * 00 - Empty
+                * 01 - Load
+                * 02 - Normal
+                * 03 - Defeated (fall off screen)
+D00F      15    Sprite slots
+                * 00 - Empty
+                * 01 - Bump block (can either look like a Brick or an Empty Block)
+                * 02 - Red Koopa Troopa
+                * 03 - Green Koopa Troopa
+                * 04 - Goomba
+                * 05/06/07/08 - Cheep-Cheep (swimming)
+                * 09 - Flag
+                * 0A - Castle Star Flag
+                * 0C - Mushroom?
+                * 0D - Fireball
+                * 0E - Brick shatter particle
+                * 0F - Fire Bar (clockwise)
+                * 10 - Fire Bar (counter-clockwise)
+                * 11 - Fire Bar (long clockwise)
+                * 12 - Fire Bar (long counter-clockwise)
+                * 13 - Fire Bar (fast clockwise)
+                * 14 - Fire Bar (fast counter-clockwise)
+                * 15 - Fire Bar (fast long clockwise)
+                * 16 - Fire Bar (fast long counter-clockwise)
+                * 17 - Hammer Bro
+                * 18 - Hammer
+                * 19 - Piranha Plant
+                * 1A - Bowser
+                * 1B - Bowser fire
+                * 1C - Toad/Peach
+                * 1D - Brick bump block?
+                * 1F - Lava Bubble
+                * 20 - Vine
+                * 21 - Firework
+                * 22 - Flying Cheep-Cheep spawner
+                * 23 - Falling Cheep-Cheep
+                * 24 - Bullet Bill	
+                * 25 - Bullet Bill (stationary)
+                * 26/27 - Red Parakoopa (vertical)
+                * 28 - Red Parakoopa (jumping)
+                * 29 - Green Parakoopa (jumping)
+                * 2A - Red Parakoopa (horizontal)
+                * 2B - Green Parakoopa (horizontal)
+                * 2C - Blooper
+                * 2D - Red Spring
+                * 2E - Lakitu
+                * 2F - Spiny Egg
+                * 30 - Spiny
+                * 31 - Buzzy Beetle
+                * 32 - Bowser fire spawner
+                * 34 - Warp Zone text generator
+                * 35 - Air Bubble
+                * 36 - Bullet Bill spawner
+                * 38 - Cheep-Cheep spawner
+                * 3C - Makes the player unable to walk anywhere when touched (used for springs?)
+                * 3D/3E - Brick that can't be broken in any form bump block
+DE00       1    Music pitch
+DE60       1    Sound effect queue #1
+DE61       1    Current sound effect playing #1
+                * 42 - Jump (small)
+                * 43 - Bump
+                * 44 - Enemy stomp/Menu selection
+                * 45 - Enemy kick
+                * 46 - Flagpole
+                * 47 - Menu navigate/Timer countdown
+                * 48 - Fireball
+                * 49 - Player death
+                * 4A - Bowser fall
+                * 4B - Bullet Bill/Firework
+                * 4C - Jump (big)
+                * 4F - Flying Cheep Cheep jump/Yoshi Egg toss/Enemy spawn (Mario Bros. unused)
+                * 50 - Sidestepper spawn (Mario Bros. unused)
+                * 51 - Fighter Fly spawn (Mario Bros. unused)
+                * 52 - Coin spawn (Mario Bros. unused)
+                * 53 - Coin (Mario Bros. unused)
+                * 54 - Enemy flip (Mario Bros. unused)
+                * 55 - Enemy defeat (Mario Bros. unused)
+                * 56 - Level clear (Mario Bros. unused)
+                * 57 - Enemy lands in water (Mario Bros. unused)
+                * 58 - Slipice activates (Mario Bros. unused)
+                * 59 - Slipice defeated (Mario Bros. unused)
+                * 5A - Countdown (Mario Bros. unused)
+                * 5D - Player hit (Mario Bros. unused)
+                * 5E - Player dies (Mario Bros. unused)
+                * 5F - Toad talking at end of Challenge Mode
+                * 60 - Face Block flip
+                * 61 - Yoshi hatching at end of Challenge Mode
+                * 62 - Collected Yoshi Egg
+                * 63 - Navigating out of menu
+                * 64 - Countdown
+                * 65 - "Go!" countdown
+                * 66 - Earning a Medal at the end of Challenge Mode
+                * 67 - When Red Coins/Score show up at the end of Challenge Mode
+                * 68 - Springboard (high jump)
+                * 69 - Springboard (low jump)
+                * 6A - Green Springboard? (high jump)
+                * 6B - Green Springboard? (low jump)
+                * 6C - 
+                * 6D - Map screen beep
+                * 6E - Selecting "Records" on the menu
+                * 6F - Selecting "Toy Box" on the menu
+                * 70 - Yoshi
+                * 71 - 
+                * 72 - Score Total in Challenge Mode going up
+                * 73 - Boo
+                * 74 - Turning around (small)
+                * 75 - Turning around (big)
+                * 76 - Title screen start
+                * 77 - Camera pan
+                * 78 - Boo cry
+DE70       1    Sound effect queue #2
+DE71       1    Current sound effect playing #2
+                * 01 - Collected Yoshi Egg (plays automatically with 62 in #1)
+                * 02 - Earning a Medal at the end of Challenge Mode (plays automatically with 66 in #1)
+                * 03 - Selecting "Records" on the menu (plays automatically with 6E in #1)
+                * 04 - Title screen start (plays automatically with 76 in #1)
+                * 24 - Coin
+                * 25 - Pipe/shrink
+                * 26 - Power-up appears
+                * 27 - Vine appears
+                * 28 - Power-up collected
+                * 29 - 1-Up
+                * 2A - Walking sound (Mario Bros. unused)
+                * 2B - Turning around (Mario Bros. unused)
+                * 2C - Jump (Mario Bros. unused)
+                * 2D - POW Block (Mario Bros. unused)
+                * 2E - Pause (Mario Bros. unused)
+                * 2F - 
+                * 30 - Error
+                * 31 - Pause
+                * 32 - 
+                * 33 - 
+                * 34/3B - 4th Red Coin collected
+                * 35/3C - 5th Red Coin collected
+                * 36 - New icon showing on Challenge Mode menu
+                * 37 - 
+                * 38 - 1st Red Coin collected
+                * 39 - 2nd Red Coin collected
+                * 3A - 3rd Red Coin collected
+                * 3D - Message set
+DE78       1    Sound effect queue #3
+DE79       1    Current sound effect playing #3
+                * 3E - 
+                * 3F - Message set (plays automatically with 3D in #2)
+                * 40 - 
+                * 41 - Brick shatter
+                * 42 - Bowser fire
+                * 43 - Fireball (Mario Bros. unused)
+                * 44 - Timer (Mario Bros. unused)
+                * 45 - Respawn jingle (Mario Bros. unused)
+                * 46 - Selecting "Album" on the menu/Page turn
+                * 47 - Yoshi Egg about to hatch
+                * 48 - Input
+DE90       1    Length of current sound effect
+DED0       1    "Hurry Up" tempo flag
+
+
+HRAM
+
+FF99       1    X position of Player
+FFA7       1    X position of Level
+FFA9       1    Y position
+FFAB       1    X speed
+FFAC       1    Y speed
+FFB5       1    Current mode
+                * See Notes page for values
