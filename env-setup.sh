@@ -10,4 +10,5 @@ conda install -c conda-forge libstdcxx-ng
 
 # Install pip dependencies
 pip install swig
-pip install gymnasium[all] pillow pyboy
+pip install gymnasium[all] pillow pyboy keyboard
+pip install stable_baselines3[extra]
