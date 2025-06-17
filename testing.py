@@ -3,8 +3,8 @@ from pyboy import PyBoy
 
 pyboy = PyBoy("./roms/SMBD.gbc", window="SDL2", scale=6)
 
-with open('roms/SMBD_save.state', 'rb') as f:
-    pyboy.load_state(f)
+# with open('roms/SMBD_save.state', 'rb') as f:
+#    pyboy.load_state(f)
 
 def save_state_to_file(something):
     with open('roms/SMBD_save.state', 'wb') as f:
