@@ -4,14 +4,14 @@ from gymnasium import spaces
 import numpy as np
 from pyboy import PyBoy
 
-actions = ['','a', 'b', 'left', 'right', 'up', 'down', 'start', 'select']
+actions = ['','a', 'b', 'left', 'right', 'up', 'down']
 
-matrix_shape = (16, 20)
-game_area_observation_space = spaces.Box(low=0, high=255, shape=matrix_shape, dtype=np.uint8)
+matrix_shape = (320,)
+game_area_observation_space = spaces.Box(low=0, high=371, shape=matrix_shape, dtype=np.uint32)
 
 class GenericPyBoyEnv(gym.Env):
 
-    def __init__(self, pyboy, debug=False):
+    def __init__(self, pyboy: PyBoy, debug=False):
         super().__init__()
         self.pyboy = pyboy
         self._fitness=0
@@ -39,12 +39,13 @@ class GenericPyBoyEnv(gym.Env):
         # self.pyboy.tick(1, False)
         self.pyboy.tick(1)
 
-        done = self.pyboy.game_wrapper.game_over
+        done = self.pyboy.game_wrapper.game_over()
 
         self._calculate_fitness()
         reward=self._fitness-self._previous_fitness
 
         observation=self.pyboy.game_area()
+        observation = np.array(observation).flatten()
         info = {}
         truncated = False
 
@@ -63,6 +64,7 @@ class GenericPyBoyEnv(gym.Env):
         self._previous_fitness=0
 
         observation=self.pyboy.game_area()
+        observation = np.array(observation).flatten()
         info = {}
         return observation, info
 
