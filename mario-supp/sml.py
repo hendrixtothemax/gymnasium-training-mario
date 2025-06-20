@@ -16,6 +16,9 @@ while pyboy.tick():
         print(gamearea)
         print(f'Height: {len(gamearea)} x Length: {len(gamearea[0])}')
         tick = 0
+    elif tick % 5 == 0:
+        y = pyboy.memory[0xC201]
+        print(f'p-y: {y}')
     tick += 1
 
 pyboy.stop()

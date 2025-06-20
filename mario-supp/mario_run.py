@@ -50,13 +50,13 @@ env = GenericPyBoyEnv(pyboy, debug=False)
 check_env(env, warn=True)
 
 # --- Create PPO model using custom MLP policy ---
-model = PPO("MlpPolicy", env, verbose=1, device='cpu')
+model = PPO("MlpPolicy", env, verbose=1, device='cpu', ent_coef=0.08)
 
 # --- Train the model ---
-model.learn(total_timesteps=50000)
+model.learn(total_timesteps=100000, progress_bar=True)
 
 # --- Save the model ---
-model.save("mlp_ppo_mario")
+model.save("mlp_ppo_mario_500000")
 
 # --- Close the environment after training ---
 env.close()
