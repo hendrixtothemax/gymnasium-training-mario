@@ -4,7 +4,8 @@ from gymnasium import spaces
 import numpy as np
 from pyboy import PyBoy
 
-actions = ['','a', 'b', 'left', 'right', 'up', 'down']
+actions = ['','a', 'b', 'left', 'right', 'up', 'down',
+           'a', 'b', 'left', 'right', 'up', 'down']
 
 matrix_shape = (320,)
 game_area_observation_space = spaces.Box(low=0, high=371, shape=matrix_shape, dtype=np.uint32)
@@ -33,11 +34,14 @@ class GenericPyBoyEnv(gym.Env):
         game_wrapper = self.pyboy.game_wrapper
 
         # Move the agent
-        if action == 0:
-            self.passed_actions += 1
-        else:
-            self.pyboy.button(actions[action], self.frame_skip)
+        if action > 0 and action <= 6:
+            self.pyboy.button_press(actions[action])
             self.passed_actions = 0
+        elif action > 6 and action < len(actions):
+            self.pyboy.button_release(actions[action])
+            self.passed_actions = 0
+        else:
+            self.passed_actions += 1
 
         # Consider disabling renderer when not needed to improve speed:
         # self.pyboy.tick(1, False)
@@ -59,7 +63,7 @@ class GenericPyBoyEnv(gym.Env):
 
         done = self.pyboy.game_wrapper.game_over()
 
-        args = {"speed": curSpeed, "died": died, "y": yChange, "cur_y": curY}
+        args = {"action": action, "speed": curSpeed, "died": died, "y": yChange, "cur_y": curY, "prevX": prevLoc, "x": curLoc}
 
         self._calculate_fitness(args)
         reward=self._fitness-self._previous_fitness
@@ -80,25 +84,12 @@ class GenericPyBoyEnv(gym.Env):
 
         game_wrapper = self.pyboy.game_wrapper
 
-        if self.passed_actions > 30:
-            now_score -= 1
-
-        if game_wrapper.game_over() or args["died"]:
-            now_score -= 10
-        else:
-            now_score += game_wrapper.coins * 0.5
-            now_score += 1  # alive bonus
-
-            if args["speed"] > 1:
-                now_score += 12
-
-            # Reward being in the air
-            if args["cur_y"] < 130:  # 0 = top of screen, 144 = bottom
-                now_score += 10  # small bonus for each in-air frame
-
-            # Discourage wasting time
-            # if game_wrapper.time_left >= 1:
-            #     now_score -= (1 / game_wrapper.time_left) * 150
+        if args["speed"] > 0:
+            now_score += 5 * args["speed"]
+        if args["died"]:
+            now_score -= 50  # Punish dying
+        if args["prevX"] < args["x"]:
+            now_score += 2
 
         self._fitness = now_score
 
@@ -108,7 +99,7 @@ class GenericPyBoyEnv(gym.Env):
         self._fitness=0
         self._previous_fitness=0
 
-        self.pyboy.game_wrapper.set_lives_left(1)
+        self.pyboy.game_wrapper.set_lives_left(0)
 
         observation=self.pyboy.game_area()
         observation = np.array(observation).flatten()

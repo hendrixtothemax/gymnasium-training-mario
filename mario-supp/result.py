@@ -6,7 +6,7 @@ from mario_env import GenericPyBoyEnv
 model = PPO.load("./mlp_ppo_mario_500000.zip", device='cpu')
 
 # Set up emulator and environment
-pyboy = PyBoy("../roms/SML.gb", window="SDL2", scale=4)
+pyboy = PyBoy("../roms/SML.gb", window="SDL2", scale=10)
 env = GenericPyBoyEnv(pyboy, debug=True)
 
 obs, info = env.reset()
