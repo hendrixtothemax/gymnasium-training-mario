@@ -4,15 +4,14 @@ from gymnasium import spaces
 import numpy as np
 from pyboy import PyBoy
 
-actions = ['','a', 'b', 'left', 'right', 'up', 'down',
-           'a', 'b', 'left', 'right', 'up', 'down']
+actions = ['','a', 'b', 'left', 'right', 'up', 'down']
 
 matrix_shape = (320,)
 game_area_observation_space = spaces.Box(low=0, high=371, shape=matrix_shape, dtype=np.uint32)
 
 class GenericPyBoyEnv(gym.Env):
 
-    def __init__(self, pyboy: PyBoy, debug=False, frame_skip=4):
+    def __init__(self, pyboy: PyBoy, debug=False, frame_skip=15, show=False):
         super().__init__()
         self.pyboy = pyboy
         self._fitness=0
@@ -20,6 +19,7 @@ class GenericPyBoyEnv(gym.Env):
         self.debug = debug
         self.passed_actions = 0
         self.frame_skip = frame_skip
+        self.show = show
 
         if not self.debug:
             self.pyboy.set_emulation_speed(0)
@@ -34,14 +34,11 @@ class GenericPyBoyEnv(gym.Env):
         game_wrapper = self.pyboy.game_wrapper
 
         # Move the agent
-        if action > 0 and action <= 6:
-            self.pyboy.button_press(actions[action])
-            self.passed_actions = 0
-        elif action > 6 and action < len(actions):
-            self.pyboy.button_release(actions[action])
-            self.passed_actions = 0
+        if action == 0:
+            self.passed_actions += self.frame_skip
         else:
-            self.passed_actions += 1
+            self.pyboy.button(actions[action], self.frame_skip-1)
+            self.passed_actions = 0
 
         # Consider disabling renderer when not needed to improve speed:
         # self.pyboy.tick(1, False)
@@ -50,7 +47,7 @@ class GenericPyBoyEnv(gym.Env):
         prevY = self.pyboy.memory[0xC201]
 
         for _ in range(self.frame_skip):
-            self.pyboy.tick(1, True)
+            self.pyboy.tick(1, True)  
 
         curY = self.pyboy.memory[0xC201]
         yChange = prevY - curY
@@ -84,10 +81,13 @@ class GenericPyBoyEnv(gym.Env):
 
         game_wrapper = self.pyboy.game_wrapper
 
+        if self.passed_actions > self.frame_skip * 10:
+            now_score -= (self.passed_actions - (self.frame_skip * 10)) // self.frame_skip
+
         if args["speed"] > 0:
             now_score += 5 * args["speed"]
         if args["died"]:
-            now_score -= 50  # Punish dying
+            now_score -= 100  # Punish dying
         if args["prevX"] < args["x"]:
             now_score += 2
 

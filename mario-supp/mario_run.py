@@ -1,62 +1,37 @@
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
-from stable_baselines3.common.policies import ActorCriticPolicy
-from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
+from stable_baselines3.common.callbacks import CheckpointCallback
 from pyboy import PyBoy
-import torch as th
-import torch.nn as nn
-import numpy as np
-import gymnasium as gym
 
 from mario_env import GenericPyBoyEnv
-
-# --- Custom feature extractor that flattens and uses MLP ---
-class FlatMLPFeatures(BaseFeaturesExtractor):
-    def __init__(self, observation_space, features_dim=128):
-        super().__init__(observation_space, features_dim)
-
-        self.flatten = nn.Flatten()
-        n_input = int(np.prod(observation_space.shape))
-
-        self.mlp = nn.Sequential(
-            nn.Linear(n_input, 256),
-            nn.ReLU(),
-            nn.Linear(256, features_dim),
-            nn.ReLU()
-        )
-
-    def forward(self, observations: th.Tensor) -> th.Tensor:
-        return self.mlp(self.flatten(observations))
-
-
-# --- Custom policy using the MLP feature extractor ---
-class FlatMLPPolicy(ActorCriticPolicy):
-    def __init__(self, *args, **kwargs):
-        super().__init__(
-            *args,
-            **kwargs,
-            features_extractor_class=FlatMLPFeatures,
-            features_extractor_kwargs=dict(features_dim=128),
-        )
-
+from matio_env_v2 import Mario
 
 # --- Initialize PyBoy emulator ---
 pyboy = PyBoy("../roms/SML.gb", window="null")
 
 # --- Initialize environment ---
-env = GenericPyBoyEnv(pyboy, debug=False)
+env = Mario(pyboy, frameskip=2)
 
 # Optional: run environment checker to validate
 check_env(env, warn=True)
 
 # --- Create PPO model using custom MLP policy ---
-model = PPO("MlpPolicy", env, verbose=1, device='cpu', ent_coef=0.1, n_steps=4096, batch_size=512)
+model = PPO("MlpPolicy", env, verbose=1, device='cpu', ent_coef=0.35, n_steps=512, batch_size=256, tensorboard_log="./tensorboard_logs/")
+
+# --- Create checkpoint callback to save every 25,000 steps ---
+checkpoint_callback = CheckpointCallback(
+    save_freq=100000,  # Number of steps
+    save_path="./checkpoints/",
+    name_prefix="ppo_mario",
+    save_replay_buffer=True,
+    save_vecnormalize=True,
+)
 
 # --- Train the model ---
-model.learn(total_timesteps=1025000, progress_bar=True)
+model.learn(total_timesteps=5000000, progress_bar=True, callback=checkpoint_callback, tb_log_name="ppo_mario_run")
 
 # --- Save the model ---
-model.save("mlp_ppo_mario_500000")
+model.save("mlp_ppo_mario_final")
 
 # --- Close the environment after training ---
 env.close()
