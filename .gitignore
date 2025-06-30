@@ -1,3 +1,5 @@
 /roms/*
 */videos
 *__pycache__
+/mario-supp/checkpoints/*
+/mario-supp/tensorboard_logs/*

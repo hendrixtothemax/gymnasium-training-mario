@@ -28,7 +28,7 @@ checkpoint_callback = CheckpointCallback(
 )
 
 # --- Train the model ---
-model.learn(total_timesteps=5000000, progress_bar=True, callback=checkpoint_callback, tb_log_name="ppo_mario_run")
+model.learn(total_timesteps=100000, progress_bar=True, callback=checkpoint_callback, tb_log_name="ppo_mario_run")
 
 # --- Save the model ---
 model.save("mlp_ppo_mario_final")

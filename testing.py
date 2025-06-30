@@ -1,7 +1,7 @@
 from pyboy import PyBoy
 # import keyboard
 
-pyboy = PyBoy("./roms/SMBD.gbc", window="SDL2", scale=6)
+pyboy = PyBoy("./roms/SML.gb", window="SDL2", scale=6)
 
 # with open('roms/SMBD_save.state', 'rb') as f:
 #    pyboy.load_state(f)
@@ -25,7 +25,7 @@ while pyboy.tick():
         mario_y = y_low + (y_high << 8)
 
 
-        print(f"Frame: {cur_frame} | Mario POS: ({mario_x}, {mario_y})", end="\r", flush=True)
+        print(f"Frame: {cur_frame} | Mario POS: ({pyboy.game_wrapper.level_progress}, {pyboy.memory[0xC201]})", end="\r", flush=True)
     
     if cur_frame >= 60:
         cur_frame = 0

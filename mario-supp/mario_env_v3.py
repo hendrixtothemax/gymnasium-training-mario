@@ -1,19 +1,20 @@
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
-from pyboy import PyBoy
 from collections import deque
 
 actions = ['a', 'b', 'left', 'right', 'up', 'down']
 
 MAX_STORED_PREV_MOVES = int(len(actions) * 45)
 GAME_OBERSVATION_SPACE = spaces.Box(low=-1024, high=1024, shape=(MAX_STORED_PREV_MOVES + 9,), dtype=np.float32)
+ROM_LOCATION = "../roms/SML.gb"
 
 class Mario(gym.Env):
 
-    def __init__(self, pyboy: PyBoy, frameskip=int(1)):
+    def __init__(self, window='null', frameskip=int(1)):
         super().__init__()
-        self.pyboy = pyboy
+        from pyboy import PyBoy
+        self.pyboy = PyBoy(ROM_LOCATION, window=window)
         self._fitness=0
         self._previous_fitness=0
         self.passed_actions = 0
