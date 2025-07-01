@@ -9,7 +9,7 @@ NUM_ENVS = 32
 
 def make_env():
     def _init():
-        return Mario(window='null')
+        return Mario(window='null', frameskip=2)
     return _init
 
 if __name__ == "__main__":

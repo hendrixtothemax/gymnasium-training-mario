@@ -1,7 +1,5 @@
 import gymnasium as gym
-from gymnasium import spaces
 import numpy as np
-from collections import deque
 from pyboy import PyBoy
 from gymnasium.spaces import Dict, Box, MultiBinary
 from PIL import Image
@@ -27,12 +25,12 @@ class Mario(gym.Env):
         # Observation space now includes grayscale image (1, 144, 160) and state vector
         self.observation_space = Dict({
             "image": Box(low=0, high=255, shape=(1, 144, 160), dtype=np.uint8),
-            "state": Box(low=-1024, high=1024, shape=(9), dtype=np.float32)
+            "state": Box(low=-1024, high=1024, shape=(9,), dtype=np.float32)
         })
 
         self.pyboy.game_wrapper.start_game()
 
-    def get_state_vector(self, action):
+    def get_state_vector(self):
         gw = self.pyboy.game_wrapper
 
         x_pos = float(gw.level_progress)
@@ -52,8 +50,7 @@ class Mario(gym.Env):
 
         return np.array([
             x_pos, y_pos, score,
-            small, growing, big, shrinking, invincible, powerup,
-            *self.prev_moves
+            small, growing, big, shrinking, invincible, powerup
         ], dtype=np.float32)
 
     def get_image_frame(self):
@@ -96,7 +93,7 @@ class Mario(gym.Env):
             else:
                 reward += 50
 
-        state = self.get_state_vector(action)
+        state = self.get_state_vector()
         image = self.get_image_frame()
 
         return {"image": image, "state": state}, reward, done, False, {}
@@ -106,7 +103,7 @@ class Mario(gym.Env):
         self.pyboy.game_wrapper.reset_game()
         self.pyboy.game_wrapper.set_lives_left(0)
         # self.prev_moves = deque([-1.0] * MAX_STORED_PREV_MOVES, maxlen=MAX_STORED_PREV_MOVES)
-        state = self.get_state_vector([0]*len(actions))
+        state = self.get_state_vector()
         image = self.get_image_frame()
         return {"image": image, "state": state}, {}
 
