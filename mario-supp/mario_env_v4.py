@@ -7,7 +7,7 @@ from gymnasium.spaces import Dict, Box, MultiBinary
 from PIL import Image
 
 actions = ['a', 'b', 'left', 'right', 'up', 'down']
-MAX_STORED_PREV_MOVES = int(len(actions) * 45)
+# MAX_STORED_PREV_MOVES = int(len(actions) * 45)
 ROM_LOCATION = "../roms/SML.gb"
 
 class Mario(gym.Env):
@@ -27,7 +27,7 @@ class Mario(gym.Env):
         # Observation space now includes grayscale image (1, 144, 160) and state vector
         self.observation_space = Dict({
             "image": Box(low=0, high=255, shape=(1, 144, 160), dtype=np.uint8),
-            "state": Box(low=-1024, high=1024, shape=(MAX_STORED_PREV_MOVES + 9,), dtype=np.float32)
+            "state": Box(low=-1024, high=1024, shape=(9), dtype=np.float32)
         })
 
         self.pyboy.game_wrapper.start_game()
@@ -46,9 +46,9 @@ class Mario(gym.Env):
         invincible = float(self.pyboy.memory[0xFF99] == 0x04)
         powerup    = float(self.pyboy.memory[0xFFB5] == 0x02)
 
-        for i, pressed in enumerate(action):
-            if pressed:
-                self.prev_moves.append(float(i))
+        # for i, pressed in enumerate(action):
+        #     if pressed:
+        #         self.prev_moves.append(float(i))
 
         return np.array([
             x_pos, y_pos, score,
@@ -105,7 +105,7 @@ class Mario(gym.Env):
         self.done = False
         self.pyboy.game_wrapper.reset_game()
         self.pyboy.game_wrapper.set_lives_left(0)
-        self.prev_moves = deque([-1.0] * MAX_STORED_PREV_MOVES, maxlen=MAX_STORED_PREV_MOVES)
+        # self.prev_moves = deque([-1.0] * MAX_STORED_PREV_MOVES, maxlen=MAX_STORED_PREV_MOVES)
         state = self.get_state_vector([0]*len(actions))
         image = self.get_image_frame()
         return {"image": image, "state": state}, {}

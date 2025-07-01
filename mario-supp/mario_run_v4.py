@@ -35,30 +35,30 @@ if __name__ == "__main__":
         verbose=1,
         device='auto',  # Use 'auto' instead of 'gpu' unless you know the exact device
         ent_coef=0.35,
-        n_steps=4096,  # Not multiplied — SB3 handles vectorization
+        n_steps=2048,  # Not multiplied — SB3 handles vectorization
         batch_size=512,  # Also not multiplied
         tensorboard_log="./tensorboard_logs/"
     )
 
     # --- Create checkpoint callback to save every 100,000 steps ---
     checkpoint_callback = CheckpointCallback(
-        save_freq=5000000,
-        save_path="./checkpoints/",
-        name_prefix="mario_ppo_cnn",
-        save_replay_buffer=False,
+        save_freq=131072,
+        save_path="./checkpointsv4/",
+        name_prefix="mario_ppo_cnn_5mil",
+        save_replay_buffer=True,
         save_vecnormalize=True,
     )
 
     # --- Train the model ---
     model.learn(
-        total_timesteps=100_000_000,
+        total_timesteps=5_000_000,
         progress_bar=True,
         callback=checkpoint_callback,
-        tb_log_name="mario_ppo_cnn_100mil"
+        tb_log_name="mario_ppo_cnn_5mil"
     )
 
     # --- Save the final model ---
-    model.save("mario_ppo_cnn_v4_100mil")
+    model.save("mario_ppo_cnn_v4_5mil")
 
     # --- Close the environment ---
     env.close()
