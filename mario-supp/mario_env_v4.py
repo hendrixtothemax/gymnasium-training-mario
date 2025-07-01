@@ -6,7 +6,7 @@ from PIL import Image
 
 actions = ['a', 'b', 'left', 'right', 'up', 'down']
 # MAX_STORED_PREV_MOVES = int(len(actions) * 45)
-ROM_LOCATION = "../roms/SML.gb"
+ROM_LOCATION = "/home/kaede/projects/gymnasium-training-mario/roms/SML.gb"
 
 class Mario(gym.Env):
     def __init__(self, window='null', frameskip=1):
@@ -86,6 +86,7 @@ class Mario(gym.Env):
             reward -= ((gw.level_progress-200) / 100) / 1.5
 
         if done:
+            self.reset()
             if gw.level_progress < 320:
                 reward -= 210
             elif gw.level_progress < 375:

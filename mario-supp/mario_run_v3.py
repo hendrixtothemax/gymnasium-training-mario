@@ -30,8 +30,8 @@ if __name__ == "__main__":
         verbose=1,
         device='cpu',  # Use 'auto' instead of 'gpu' unless you know the exact device
         ent_coef=0.35,
-        n_steps=4096,  # Not multiplied — SB3 handles vectorization
-        batch_size=512,  # Also not multiplied
+        n_steps=60,  # Not multiplied — SB3 handles vectorization
+        batch_size=64,  # Also not multiplied
         tensorboard_log="./tensorboard_logs/"
     )
 

@@ -5,7 +5,7 @@ from stable_baselines3.common.vec_env import SubprocVecEnv
 from cnn_with_state_extractor import CNNWithStateExtractor
 from mario_env_v4 import Mario
 
-NUM_ENVS = 32
+NUM_ENVS = 1
 
 def make_env():
     def _init():
@@ -35,8 +35,8 @@ if __name__ == "__main__":
         verbose=1,
         device='auto',  # Use 'auto' instead of 'gpu' unless you know the exact device
         ent_coef=0.35,
-        n_steps=2048,  # Not multiplied — SB3 handles vectorization
-        batch_size=512,  # Also not multiplied
+        n_steps=120,  # Not multiplied — SB3 handles vectorization
+        batch_size=64,  # Also not multiplied
         tensorboard_log="./tensorboard_logs/"
     )
 

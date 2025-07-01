@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Run Super Mario",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/home/kaede/projects/gymnasium-training-mario/mario-supp/mario_run_v4.py",
+            "console": "integratedTerminal",
+            "python": "/home/kaede/miniconda3/envs/gymnasium-mario-env/bin/python",
+            "justMyCode": false
+            // "args": "${command:pickArgs}"
+        }
+    ]
+}
