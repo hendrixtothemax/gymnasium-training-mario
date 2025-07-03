@@ -3,3 +3,7 @@
 *__pycache__
 /mario-supp/checkpoints/*
 /mario-supp/tensorboard_logs/*
+mario-supp/logs/
+mario-supp/mario_ppo_cnn_5mil3/
+mario-supp/mario_ppo_cnn_5mil4/
+*.zip

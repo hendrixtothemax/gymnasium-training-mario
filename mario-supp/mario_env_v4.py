@@ -6,7 +6,7 @@ from PIL import Image
 
 actions = ['a', 'b', 'left', 'right', 'up', 'down']
 # MAX_STORED_PREV_MOVES = int(len(actions) * 45)
-ROM_LOCATION = "/home/kaede/projects/gymnasium-training-mario/roms/SML.gb"
+ROM_LOCATION = "/home/tsubaki/projects/gymnasium-training-mario/roms/SML.gb"
 
 class Mario(gym.Env):
     def __init__(self, window='null', frameskip=1):
@@ -81,16 +81,15 @@ class Mario(gym.Env):
 
         done = gw.game_over()
         reward = gw.score / 1000
-        reward += (gw.level_progress-200) / 100
-        if (self.prevx + 2) >= gw.level_progress:
+        reward += (gw.level_progress-200) / 75
+
+        if (self.prevx + 5) >= gw.level_progress:
             reward -= ((gw.level_progress-200) / 100) / 1.5
 
-        if done:
+        if done or self.total_steps > 2000:
             self.reset()
-            if gw.level_progress < 320:
+            if gw.level_progress < 435:
                 reward -= 210
-            elif gw.level_progress < 375:
-                reward -= 150
             else:
                 reward += 50
 
@@ -103,13 +102,14 @@ class Mario(gym.Env):
         self.done = False
         self.pyboy.game_wrapper.reset_game()
         self.pyboy.game_wrapper.set_lives_left(0)
+        self.total_steps = 0
         # self.prev_moves = deque([-1.0] * MAX_STORED_PREV_MOVES, maxlen=MAX_STORED_PREV_MOVES)
         state = self.get_state_vector()
         image = self.get_image_frame()
         return {"image": image, "state": state}, {}
 
-    def render(self, mode='human'):
-        pass
+    # def render(self, mode='human'):
+    #     pass
 
     def close(self):
         self.pyboy.stop()
